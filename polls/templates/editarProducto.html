@@ -1,0 +1,46 @@
+{% extends "./base.html" %}
+{% block title %}Control de inventario {% endblock %}
+{%block body%}
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <h2>Editar producto</h2>
+        <div class="card">
+            <div class="card-body">
+                <form action="../inventario/editarProductos/" method="POST">{% csrf_token %}
+                    <div class="form-group">
+                        <label for="id">Identificador</label>
+                        <input type="text" id="id" name="id" class="form-control" value="{{codigo.id}}" placeholder="Codigo" required readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="pcodigo" name="pcodigo" value="{{codigo.pcodigo}}" class="form-control" placeholder="Codigo" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="nombre" name="nombre"  value="{{codigo.nombre}}" class="form-control" placeholder="Nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" id="precio" name="precio"  value="{{producto.precio}}" class="form-control" placeholder="Precio" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" id="precioiva" name="precioiva"  value="{{codigo.precioiva}}" class="form-control" placeholder="0" value="0" readonly>
+                    </div>                    
+                    <div class="form-group">
+                        <input type="date" id="fechavenci" name="fechavenci"  value="{{codigo.fechavenci}}" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <select type="text" id="categoryid" name="categoryid" class="form-select"  required>
+                            <option value=""></option>
+                            <option value="1">1</option>
+                            <option value="">2</option>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="cantidad" name="cantidad"  value="{{codigo.cantidad}}" class="form-control" placeholder="Cantidad" required>
+                    </div>
+                    <div class="form-group d-grid gap-2">
+                        <button type="submit" class="btn btn-primary ">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}

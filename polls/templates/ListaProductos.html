@@ -1,0 +1,130 @@
+{% extends "./base.html" %}
+{% block title %}Control de inventario {% endblock %}
+{%block body%}
+{% load static %}
+{% block script %}
+{{block.super}}
+<script src="{% static 'js/listaproductos/listaproducto.js'%}"></script>
+{%endblock%}
+{% load django_tables2 %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/listaproductos/listaproductos.css' %}"></link>
+{% endblock %}
+<div id="spinner-overlay" >
+    <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-4 col-xl-4">
+        <h2>Ingreso de producto</h2>
+        <div class="card">
+            <div class="card-body">
+                <form action="inventario/guardarProducto/" method="POST">{% csrf_token %}
+                   
+                    <div class="form-group">
+                        <input type="text" id="pcodigo" name="pcodigo" class="form-control" placeholder="Codigo" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" id="precio" name="precio" class="form-control" placeholder="Precio" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" id="precioiva" name="precioiva" class="form-control" placeholder="0" value="0" readonly>
+                    </div>                    
+                    <div class="form-group">
+                        <input type="date" id="fechavenci" name="fechavenci" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <select type="text" id="categoryid" name="categoryid" class="form-select"  required>
+                            <option value=""></option>
+                            <option value="1">1</option>
+                            <option value="">2</option>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="cantidad" name="cantidad" class="form-control" placeholder="Cantidad" required>
+                    </div>
+                    <div class="form-group d-grid gap-2">
+                        <button type="submit" class="btn btn-primary ">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+        <div class="col-sm-12 col-md-8 col-xl-8 table-container">
+          
+            {% render_table table %}
+        </div>
+    </div>
+  <!--  <div class="col-sm-12 col-md-8 col-xl-8">
+        <h1>Lista de productos</h1>
+        <div class="table-responive py-2">
+               <table class="table table-striped">
+                <thead>
+                </thead>
+                <tr>
+                    <th>
+                        codigo
+                    </th>
+                    <th>
+                        nombre
+                    </th>
+                    <th colspan="2">
+                        Opciones
+                    </th>
+                </tr>
+                <tbody>
+                    {% for c in venues %}
+                    <tr>
+                        <td>
+                            {{c.pcodigo}}
+                        </td>
+                        <td>
+                            {{c.nombre}}
+                        </td>
+                        <td>
+                        <a href="editarProducto/{{c.id}}" class="btn btn-info">Editar</a>              
+                        </td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+               </table>
+               <br>
+               <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                  <li class="page-item">
+                    {% if venues.has_previous %}
+                    <a href="?pages=1" class="page-link" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                   <li class="page-item">  <a href="?page={{venues.previous_page_number }}" class="page-link">Volver</a>
+                    {% endif %}</li>
+
+                  <li class="page-item"> <a class="page-link" href="#"> Pagina: {{venues.number}}</a></li>
+                  <li class="page-item"><a class="page-link" href="#">De {{venues.paginator.num_pages}}</a></li>
+                  <li class="page-item">
+                    {% if venues.has_next %}
+                    <a href="?page={{venues.next_page_number}}" class="page-link" aria-label="Siguiente">
+                        Siguiente
+                    </a>                   
+                  </li>
+                  <li class="page-item">
+                    <a href="?page={{venues.paginator.num_pages}}" class="page-link"> &raquo</a>
+                    {% endif %}                      
+                  </li>
+                </ul>
+              </nav>  
+        </div>
+    </div>-->
+
+
+{%endblock%}
+
