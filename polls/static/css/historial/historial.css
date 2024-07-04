@@ -1,0 +1,32 @@
+#ventashoy, #ventasemana, #ventamensual {
+    border: 2px solid #1636ec67;
+    text-align: center;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+/* Diferentes colores para cada cuadro */
+#ventasemana {
+    border-color: blue;
+}
+
+#ventamensual {
+    border-color: violet;
+}
+
+/* Estilo para la tabla */
+.table-container {
+    margin-top: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #ventashoy, #ventasemana, #ventamensual {
+        margin-bottom: 15px;
+    }
+
+    .table-container {
+        margin-top: 15px;
+    }
+}

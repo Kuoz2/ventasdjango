@@ -2,9 +2,10 @@
     var numerodeFila=0;
     var TotalObtenido=0;
     var descontar = 0
-     document.addEventListener('DOMContentLoaded',function() {
-        document.getElementById('spinner-overlay').style.display = 'block';
+    document.addEventListener('DOMContentLoaded',function() {
 
+        document.getElementById('spinner-overlay').style.display = 'block';
+        console.log("hola")
         $.fn.dataTable.ext.search.push(
             function( settings, data, dataIndex ) {
                 var searchValue = $('#dt-search-0').val().trim(); // Supongamos que tienes un input con id 'mySearchInput' para ingresar el código
@@ -12,9 +13,7 @@
                     return codigo === searchValue;               
             }
         );
-        
-       
-       var table = $('#dataTable').DataTable({
+    var table = $('#dataTable').DataTable({
             "paging":false,
             "lengthMenu": [[], []],
             "defaultContent":"<button>Editar</button>",                  
@@ -106,22 +105,22 @@
   
       })
       window.addEventListener('load', function(){
-        console.log('Load event fired');
-
+    
         document.getElementById('spinner-overlay').style.display = 'none';
       })
     function agregar(pcodigo,nombre, precio,cantidad,id){
         const carritoElement = document.getElementById('TableVentas');
-
+        const totalElement = document.getElementById('Total');
+        
         // Verificar si ya existen elementos en el carrito
         const existeCarrito = carritoElement.querySelector('table');
-    
+        
         // Crear una nueva tabla si no existe carrito previo
         if (!existeCarrito) {
             // Crear una nueva tabla
             const tabla = document.createElement('table');
             tabla.classList.add('table', 'table-striped');
-    
+        
             // Crear el encabezado de la tabla
             const thead = document.createElement('thead');
             const headRow = document.createElement('tr');
@@ -133,112 +132,119 @@
             });
             thead.appendChild(headRow);
             tabla.appendChild(thead);
-    
+        
             // Agregar la tabla al contenedor del carrito de compras
             carritoElement.appendChild(tabla);
         }
+        
         // Verificar si ya existe el cuerpo de la tabla
         let tbody = carritoElement.querySelector('tbody');
-
+        
         // Crear el cuerpo de la tabla si no existe
         if (!tbody) {
             tbody = document.createElement('tbody');
             carritoElement.querySelector('table').appendChild(tbody);
         }
-
+        
         // Crear una fila para el nuevo producto
         const row = document.createElement('tr');
-    
+        
         // Crear celdas para cada atributo del producto
         const pcodigoCell = document.createElement('td');
         pcodigoCell.textContent = pcodigo;
-    
+        
         const nombreCell = document.createElement('td');
         nombreCell.textContent = nombre;
-    
+        
         const precioCell = document.createElement('td');
         precioCell.textContent = precio;
-    
+        
         const cantidadCell = document.createElement('td');
         cantidadCell.textContent = cantidad;
-    
+        
         // Crear una celda para el botón de eliminación
         const eliminarCell = document.createElement('td');
         const eliminarBtn = document.createElement('button');
         eliminarBtn.textContent = 'Eliminar';
-        eliminarBtn.classList.add('btn', 'btn-danger'); 
+        eliminarBtn.classList.add('btn', 'btn-danger');
         eliminarBtn.addEventListener('click', function() {
             // Eliminar la fila cuando se hace clic en el botón de eliminar
             const filaActual = eliminarBtn.closest('tr');
             const precio = parseInt(filaActual.querySelector('td:nth-child(3)').textContent);
             const cantidad = parseInt(filaActual.querySelector('td:nth-child(4)').textContent);
             const indiceFila = obtenerIndiceFila(filaActual);
-
+        
             // Ahora puedes usar el índiceFila según sea necesario
             console.log('La fila actual está en la posición:', indiceFila);
-            datosIngresados.splice(indiceFila, 1)            // Calcular el total actual restando el precio de la fila eliminada
-            let totalActual = document.getElementById('Total').textContent;
+            datosIngresados.splice(indiceFila, 1); // Calcular el total actual restando el precio de la fila eliminada
+            let totalActual = parseInt(totalElement.textContent.replace(/\$/g, '').replace(/^Total:\s*/, ''));
+            totalActual -= precio;
+            totalElement.textContent = 'Total: $' + totalActual;
         
-            let totalsinSigno=parseInt(totalActual.replace(/\$/g, '').replace(/^Total:\s*/, ''));
-                this.descontar = totalsinSigno - precio;
-                console.log('descontando', this.descontar)
-            document.getElementById('Total').textContent = 'Total: $' + this.descontar;
-
             // Eliminar la fila cuando se hace clic en el botón de eliminar
             filaActual.remove();
-           return this.descontar
+            return totalActual;
         });
-    
-        function obtenerIndiceFila( fila ){
-               // Obtener el tbody al que pertenece la fila
-        const tbody = fila.closest('tbody');
-
-    // Obtener todas las filas del tbody
-        const filas = Array.from(tbody.querySelectorAll('tr'));
-    
-    // Iterar sobre las filas previas para contar la posición de la fila actual
-        let indice = 0;
-        for (const filaIterada of filas) {
-            if (filaIterada === fila) {
-            break; // Detener la iteración cuando se encuentra la fila actual
+        
+        function obtenerIndiceFila(fila) {
+            // Obtener el tbody al que pertenece la fila
+            const tbody = fila.closest('tbody');
+        
+            // Obtener todas las filas del tbody
+            const filas = Array.from(tbody.querySelectorAll('tr'));
+        
+            // Iterar sobre las filas previas para contar la posición de la fila actual
+            let indice = 0;
+            for (const filaIterada of filas) {
+                if (filaIterada === fila) {
+                    break; // Detener la iteración cuando se encuentra la fila actual
+                }
+                indice++;
+            }
+        
+            return indice !== -1 ? indice : null;
         }
-        indice++;
-    }
-
-    return indice !== -1 ? indice : null; 
-          }
-          //Guarda los registros ingresados de los productos a vender
-         
         eliminarCell.appendChild(eliminarBtn);
-    
+        
         // Agregar las celdas a la fila
         row.appendChild(pcodigoCell);
         row.appendChild(nombreCell);
         row.appendChild(precioCell);
         row.appendChild(cantidadCell);
         row.appendChild(eliminarCell);
-    
+        
         // Agregar la fila al cuerpo de la tabla
         tbody.appendChild(row);
-    
+        
         // Obtener la tabla existente o crear una nueva si no existe
         const tablaExistente = carritoElement.querySelector('table') || document.createElement('table');
         tablaExistente.classList.add('table', 'table-striped');
-    
+        
         // Agregar el cuerpo de la tabla a la tabla existente
         tablaExistente.appendChild(tbody);
-    
+        
         // Agregar la tabla al contenedor del carrito de compras
         carritoElement.appendChild(tablaExistente);
-    // Calcular y mostrar el total
-    mostrarTotal(carritoElement);
+        
+        // Calcular y mostrar el total
+        mostrarTotal(carritoElement);
+        
+        function mostrarTotal(element) {
+            let total = 0;
+            const filas = element.querySelectorAll('tbody tr');
+            filas.forEach(fila => {
+                const precio = parseInt(fila.querySelector('td:nth-child(3)').textContent);
+                const cantidad = parseInt(fila.querySelector('td:nth-child(4)').textContent);
+                total += precio;
+            });
+            totalElement.textContent = 'Total: $' + total;
+        }
 
 }//Termino de agregar al carrito
 
 document.addEventListener('DOMContentLoaded', function(){
     btnGUardar = document.getElementById('guardarVenta');
   
-
 
     btnGUardar.addEventListener('click', function() {
        
@@ -270,23 +276,25 @@ document.addEventListener('DOMContentLoaded', function(){
                 const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
    
                 $.ajax({
-                    url: '../../inventario/inventario/editarVentaProducto',
+                    url: '../inventario/editarVentaProducto',
                     method: 'PUT',
                     type:'PUT',
-                    data: JSON.stringify(datosActualizados),
-                    contentType:'application/json',
-                    dataType: 'json',
                     headers: {
                         "X-CSRFToken": csrfToken // Establecer el token CSRF en el encabezado
                     },
                     xhrFields: {
                         withCredentials: true // Enviar las credenciales para permitir solicitudes entre dominios
                     },
-                    success: function(response){
-                        console.log('Actualizado con exito', response);
-                    },
+                    data: JSON.stringify(datosActualizados),
+                    contentType:'application/json',
+                    dataType: 'json',
+                    success: function (response){
+                        if(response.success == 'Informacion guardada'){
+                            location.reload();
+                        }else{console.error('Error:', response.error);}
+                     },
                     error: function(xhr, errmsg, err){
-                        console.log(xhr.status + ':' + xhr.responseText);
+                        console.log('estatus del guardado',xhr.status + ':' + xhr.responseText);
                     }
                 })
                 datosIngresados.forEach(producto => {
@@ -303,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 const dia = fechaActual.getDate();
                 const hoy = dia+ '/' + mes + '/' + año
                 let cantidad=countById[id];
-                let preciov = sumaPreciosById[id];;
+                let preciov = sumaPreciosById[id];
                 let fechav=hoy.toString();
                 let metodov = document.getElementById('metodoPago').value;
                 let productoin=0;
@@ -371,14 +379,20 @@ function eleccionVenta(a){
 
 document.addEventListener('DOMContentLoaded', function(){
     const subtotal = document.getElementById('subtotal')
+    const totalElement = document.getElementById('Total');
+    const devolucion = document.getElementById('devolucion')
     subtotal.addEventListener('input', function(event){
         let evento = event.target.value;
-        let valor =  evento - descontar;
-        console.log(descontar)
-        document.getElementById('devolucion').value = valor
-        console.log('mostrar el evento', evento)
-        return
+        let valor =  evento - parseInt(totalElement.textContent.replace(/\$/g, '').replace(/^Total:\s*/, ''));
+       if(event.target.value){
+        devolucion.value = valor
+       }else{
+        devolucion.value = 0
+       }
+        return devolucion
     })
+
+    
 })
    
 function mostrarTotal(carritoElement) {

@@ -1,0 +1,34 @@
+{% extends "./base.html" %}
+{% block title %}Historial de ventas{% endblock %}
+{%block body%}
+{% load static %}
+{% block script %}
+{{block.super}}
+<script src="{% static 'js/historial/historial.js' %}"></script>
+{%endblock%}
+{% load django_tables2 %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/historial/historial.css' %}">
+{%endblock%}
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 ml-md-auto" id="ventashoy">
+            <h1>{{ventas_hoy}}</h1>
+            <p>Las ganancias del dia de hoy</p>
+        </div>
+        <div class="col-md-3 ml-md-auto" id="ventasemana">
+            <h1>{{ventas_semana}}</h1>
+            <p>Ganancias de esta semana</p>
+        </div>
+        <div class="col-md-3 ml-md-auto" id="ventamensual">
+            <h1>{{ventas_mes}}</h1>
+            <p>Gabancias de este mes</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            {% render_table ventas %}
+        </div> 
+    </div>
+</div>
+{%endblock%}

@@ -17,12 +17,12 @@ document.addEventListener('DOMContentLoaded', function(){
         "lengthMenu": [[8, 25, 50, -1], [8, 25, 50, "Todos"]],
         "defaultContent":"<button>Editar</button>",                  
         "language": {
-            "lengthMenu": "Mostrar _MENU_ registros por página",
+            "lengthMenu": "Mostrar _MENU_ registros por pagina",
             "zeroRecords": "No se encontraron registros",
             "info": "",
             "infoEmpty": "No hay registros disponibles",
             "infoFiltered": "(filtrado de _MAX_ registros totales)",
-            "search": "Buscar Por código:",
+            "search": "Buscar Por codigo:",
             "paginate": {
                 "first": "Primero",
                 "last": "Último",
